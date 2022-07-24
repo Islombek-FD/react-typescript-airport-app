@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from 'react';
+import Navigation from "./components/Navigation";
+import {Navigate, Route, Routes} from "react-router-dom";
+
+import Main from "./pages/Main";
+import AirportDetail from "./pages/AirportDetail";
+import Auth from "./pages/Auth";
+import {useAppDispatch} from "./hooks/useRedux";
+import {fetchHandbooks} from "./store/actions/handbookActions";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+   const dispatch = useAppDispatch();
+
+   useEffect(() => {
+      dispatch(fetchHandbooks());
+   }, [dispatch]);
+
+   return (
+      <div>
+         <Navigation/>
+
+         <Routes>
+            <Route path='/airport' element={<Main />} />
+
+            <Route path='/airport/:id' element={<AirportDetail />} />
+
+            <Route path='/auth' element={<Auth />} />
+
+            <Route path='/' element={<Navigate to='/airport' />} />
+         </Routes>
+      </div>
+   );
 }
 
 export default App;
